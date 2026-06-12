@@ -3,234 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 网站标题 -->
     <title>阿垚的碎碎念</title>
-    <style>
-        /* 全局基础样式 + 爱心鼠标指针 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "微软雅黑", sans-serif;
-            /* 爱心鼠标（内联SVG，本地/线上都兼容） */
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff6b81" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
-        }
-
-        /* 背景图片：强化自适应，全屏铺满、不变形、滚动固定 */
-        body {
-            background-image: url("star.jpg");
-            background-size: cover;       /* 图片自适应铺满全屏 */
-            background-position: center;  /* 图片居中显示 */
-            background-attachment: fixed;  /* 滚动页面，背景固定不动 */
-            background-repeat: no-repeat;
-            color: #2d3436;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* 图层1：静态繁星画布（最底层） */
-        #starCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -3;
-            pointer-events: none;
-        }
-
-        /* 图层2：流星雨画布 */
-        #meteorCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        /* ========== 鼠标跟随动态爱心 ========== */
-        .follow-heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: -1;
-            transform: translate(-50%, -50%);
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 180, 220, 0.9), 0 0 15px rgba(170, 255, 255, 0.7);
-            animation: floatHeart 1.2s ease-out forwards;
-        }
-        @keyframes floatHeart {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) rotate(0deg) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -180%) rotate(360deg) scale(0.4);
-            }
-        }
-        /* ====================================== */
-
-        /* 导航栏 - 调低透明度，透出背景 */
-        header {
-            background-color: rgba(116, 185, 255, 0.55);
-            color: #ffffff;
-            padding: 1.2rem 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .blog-title {
-            font-size: 1.6rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3); /* 文字防模糊 */
-        }
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            margin-left: 2rem;
-            font-size: 1.05rem;
-            transition: color 0.3s ease;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        .nav-links a:hover {
-            color: #0984e3;
-        }
-
-        /* 两栏布局外层容器 */
-        .wrap {
-            max-width: 1200px;
-            margin: 2.5rem auto;
-            padding: 0 2rem;
-            display: flex;
-            gap: 2rem;
-        }
-
-        /* 左侧：个人介绍侧边栏 */
-        .sidebar {
-            width: 280px;
-            flex-shrink: 0;
-        }
-        /* 侧边卡片 - 高半透明，清晰看到背景星空 */
-        .side-card {
-            background-color: rgba(255, 255, 255, 0.6);
-            padding: 1.8rem;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        }
-        .avatar {
-            width: 100px;
-            height: 100px;
-            background-color: #74b9ff;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 2rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        .side-name {
-            text-align: center;
-            font-size: 1.4rem;
-            color: #0984e3;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-        .side-desc {
-            color: #2c3e50;
-            font-size: 0.95rem;
-            margin-bottom: 1.2rem;
-            text-align: center;
-        }
-        .side-info {
-            margin-top: 1rem;
-            border-top: 1px solid rgba(224, 233, 240, 0.6);
-            padding-top: 1rem;
-        }
-        .side-info p {
-            font-size: 0.9rem;
-            color: #34495e;
-            margin: 0.5rem 0;
-        }
-
-        /* 右侧：文章列表区域 */
-        .main-content {
-            flex: 1;
-        }
-        .main-content > h2 {
-            margin-bottom: 1.8rem;
-            color: #ffffff;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-        }
-
-        /* 文章卡片 - 高半透明，透出背景图片/流星/星星 */
-        .post-card {
-            background-color: rgba(255, 255, 255, 0.6);
-            padding: 1.8rem;
-            margin-bottom: 1.8rem;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s ease;
-        }
-        .post-card:hover {
-            transform: translateY(-4px);
-        }
-        .post-title a {
-            color: #0984e3;
-            font-size: 1.35rem;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .post-title a:hover {
-            color: #74b9ff;
-            text-decoration: underline;
-        }
-        .post-date {
-            color: #44546a;
-            font-size: 0.9rem;
-            margin: 0.6rem 0 1rem;
-        }
-        .post-excerpt {
-            color: #2c3e50;
-            font-size: 1rem;
-        }
-
-        /* 页脚 - 调低透明度 */
-        footer {
-            background-color: rgba(116, 185, 255, 0.55);
-            color: #fff;
-            text-align: center;
-            padding: 1.2rem;
-            margin-top: 4rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        /* 手机端适配：两栏变上下布局 */
-        @media (max-width: 768px) {
-            .wrap {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-            }
-        }
-    </style>
+    <!-- 【关键】引入全局样式文件（全站共用背景、色调、布局） -->
+    <link rel="stylesheet" href="common.css">
 </head>
 <body>
-    <!-- 静态繁星画布（最底层） -->
+    <!-- 特效画布（必须保留，配合common.js运行） -->
     <canvas id="starCanvas"></canvas>
-    <!-- 流星雨画布 -->
     <canvas id="meteorCanvas"></canvas>
 
     <!-- 顶部导航栏 -->
@@ -238,8 +17,8 @@
         <div class="nav-container">
             <div class="blog-title">阿垚的碎碎念</div>
             <nav class="nav-links">
-                <a href="#">首页</a>
-                <a href="#">文章</a>
+                <a href="index.html">首页</a>
+                <a href="math.html">文章</a>
                 <a href="#">关于我</a>
             </nav>
         </div>
@@ -247,7 +26,7 @@
 
     <!-- 主体两栏布局 -->
     <div class="wrap">
-        <!-- 左侧：个人介绍侧边栏 -->
+        <!-- 左侧个人侧边栏 -->
         <aside class="sidebar">
             <div class="side-card">
                 <div class="avatar">垚</div>
@@ -264,27 +43,21 @@
             </div>
         </aside>
 
-        <!-- 右侧：文章列表区域 -->
+        <!-- 右侧文章列表 -->
         <main class="main-content">
             <h2>📝 我的文章笔记</h2>
             <article class="post-card">
-                <h3 class="post-title">
-                    <a href="math.html">一、高数复习笔记</a>
-                </h3>
+                <h3 class="post-title"><a href="math.html">一、高数复习笔记</a></h3>
                 <div class="post-date">发布于 2026-06-12</div>
                 <p class="post-excerpt">整理高等数学核心知识点、公式与典型例题，用于日常复习备考，持续更新中。</p>
             </article>
             <article class="post-card">
-                <h3 class="post-title">
-                    <a href="code.html">二、编程学习记录</a>
-                </h3>
+                <h3 class="post-title"><a href="code.html">二、编程学习记录</a></h3>
                 <div class="post-date">发布于 2026-06-11</div>
                 <p class="post-excerpt">记录VS Code、HTML、GitHub Pages的学习过程，分享新手实用小技巧。</p>
             </article>
             <article class="post-card">
-                <h3 class="post-title">
-                    <a href="read.html">三、读书笔记分享</a>
-                </h3>
+                <h3 class="post-title"><a href="read.html">三、读书笔记分享</a></h3>
                 <div class="post-date">发布于 2026-06-10</div>
                 <p class="post-excerpt">分享近期阅读的书籍、读后感与摘抄，一起在文字里成长。</p>
             </article>
@@ -296,157 +69,7 @@
         <p>© 2026 阿垚的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
     </footer>
 
-    <!-- JS 1：静态满天繁星 -->
-    <script>
-        const starCanvas = document.getElementById('starCanvas');
-        const starCtx = starCanvas.getContext('2d');
-        let starWidth, starHeight;
-        let stars = [];
-
-        function resizeStar() {
-            starWidth = window.innerWidth;
-            starHeight = window.innerHeight;
-            starCanvas.width = starWidth;
-            starCanvas.height = starHeight;
-        }
-        resizeStar();
-        window.addEventListener('resize', resizeStar);
-
-        class Star {
-            constructor() {
-                this.x = Math.random() * starWidth;
-                this.y = Math.random() * starHeight;
-                this.r = Math.random() * 1.2 + 0.3;
-                this.alpha = Math.random() * 0.8 + 0.2;
-            }
-            draw() {
-                starCtx.beginPath();
-                starCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                starCtx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                starCtx.fill();
-            }
-        }
-
-        function createStar() {
-            for (let i = 220; i > 0; i--) {
-                stars.push(new Star());
-            }
-        }
-
-        function drawStarAll() {
-            starCtx.clearRect(0, 0, starWidth, starHeight);
-            stars.forEach(item => item.draw());
-            requestAnimationFrame(drawStarAll);
-        }
-        createStar();
-        drawStarAll();
-    </script>
-
-    <!-- JS 2：动态流星雨 -->
-    <script>
-        const canvas = document.getElementById('meteorCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let meteors = [];
-
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        class Meteor {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height - height;
-                this.len = Math.random() * 80 + 20;
-                this.speed = Math.random() * 4 + 2;
-                this.angle = Math.PI / 4;
-                this.opacity = Math.random() * 0.8 + 0.2;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                const endX = this.x + this.len * Math.cos(this.angle);
-                const endY = this.y + this.len * Math.sin(this.angle);
-                ctx.lineTo(endX, endY);
-                const grad = ctx.createLinearGradient(this.x, this.y, endX, endY);
-                grad.addColorStop(0, `rgba(220, 235, 255, ${this.opacity})`);
-                grad.addColorStop(1, 'rgba(255,255,0)');
-                ctx.strokeStyle = grad;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            }
-            update() {
-                this.x += this.speed * Math.cos(this.angle);
-                this.y += this.speed * Math.sin(this.angle);
-                if (this.y > height || this.x > width) {
-                    this.reset();
-                }
-                this.draw();
-            }
-        }
-
-        function init() {
-            for (let i = 25; i > 0; i--) {
-                meteors.push(new Meteor());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            meteors.forEach(meteor => meteor.update());
-            requestAnimationFrame(animate);
-        }
-        init();
-        animate();
-    </script>
-
-    <!-- JS 3：鼠标跟随布灵布灵爱心 -->
-    <script>
-        let lastTime = 0;
-        const heartColors = ['#ff8fb9', '#a0c8ff', '#ffffff'];
-
-        document.addEventListener('mousemove', function(e) {
-            const now = Date.now();
-            if (now - lastTime < 120) return;
-            lastTime = now;
-
-            const heart = document.createElement('div');
-            heart.className = 'follow-heart';
-            heart.style.backgroundColor = heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.style.left = e.pageX + 'px';
-            heart.style.top = e.pageY + 'px';
-            document.body.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 1200);
-        });
-
-        document.addEventListener('touchmove', function(e) {
-            const now = Date.now();
-            if (now - lastTime < 120) return;
-            lastTime = now;
-
-            const touch = e.touches[0];
-            const heart = document.createElement('div');
-            heart.className = 'follow-heart';
-            heart.style.backgroundColor = heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.style.left = touch.pageX + 'px';
-            heart.style.top = touch.pageY + 'px';
-            document.body.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 1200);
-        });
-    </script>
+    <!-- 【关键】引入全局动态脚本（繁星、流星、爱心） -->
+    <script src="common.js"></script>
 </body>
 </html>
