@@ -12,15 +12,17 @@
             padding: 0;
             box-sizing: border-box;
             font-family: "微软雅黑", sans-serif;
-            /* 爱心鼠标 */
+            /* 爱心鼠标（内联SVG，本地/线上都兼容） */
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff6b81" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
         }
 
-        /* 主体：纯代码星空底色（无任何图片链接） */
+        /* 背景图片：强化自适应，全屏铺满、不变形、滚动固定 */
         body {
-            /* 深蓝渐变星空底色，替代图片 */
-            background: linear-gradient(#0a1022, #142044, #0d1836);
-            background-attachment: fixed;
+            background-image: url("star.jpg");
+            background-size: cover;       /* 图片自适应铺满全屏 */
+            background-position: center;  /* 图片居中显示 */
+            background-attachment: fixed;  /* 滚动页面，背景固定不动 */
+            background-repeat: no-repeat;
             color: #2d3436;
             line-height: 1.6;
             overflow-x: hidden;
@@ -57,7 +59,7 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 180, 220, 0.9), 0 0 15px rgba(170, 210, 255, 0.7);
+            box-shadow: 0 0 8px rgba(255, 180, 220, 0.9), 0 0 15px rgba(170, 255, 255, 0.7);
             animation: floatHeart 1.2s ease-out forwards;
         }
         @keyframes floatHeart {
@@ -72,12 +74,12 @@
         }
         /* ====================================== */
 
-        /* 导航栏 */
+        /* 导航栏 - 调低透明度，透出背景 */
         header {
-            background-color: rgba(116, 185, 255, 0.85);
+            background-color: rgba(116, 185, 255, 0.55);
             color: #ffffff;
             padding: 1.2rem 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .nav-container {
             max-width: 1200px;
@@ -90,6 +92,7 @@
             font-size: 1.6rem;
             font-weight: bold;
             letter-spacing: 2px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3); /* 文字防模糊 */
         }
         .nav-links a {
             color: #ffffff;
@@ -97,6 +100,7 @@
             margin-left: 2rem;
             font-size: 1.05rem;
             transition: color 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .nav-links a:hover {
             color: #0984e3;
@@ -116,11 +120,12 @@
             width: 280px;
             flex-shrink: 0;
         }
+        /* 侧边卡片 - 高半透明，清晰看到背景星空 */
         .side-card {
-            background-color: rgba(255, 255, 255, 0.88);
+            background-color: rgba(255, 255, 255, 0.6);
             padding: 1.8rem;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
         }
         .avatar {
             width: 100px;
@@ -133,6 +138,7 @@
             justify-content: center;
             color: #fff;
             font-size: 2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .side-name {
             text-align: center;
@@ -142,19 +148,19 @@
             margin-bottom: 1rem;
         }
         .side-desc {
-            color: #48545a;
+            color: #2c3e50;
             font-size: 0.95rem;
             margin-bottom: 1.2rem;
             text-align: center;
         }
         .side-info {
             margin-top: 1rem;
-            border-top: 1px solid #e0e9f0;
+            border-top: 1px solid rgba(224, 233, 240, 0.6);
             padding-top: 1rem;
         }
         .side-info p {
             font-size: 0.9rem;
-            color: #636e72;
+            color: #34495e;
             margin: 0.5rem 0;
         }
 
@@ -165,16 +171,16 @@
         .main-content > h2 {
             margin-bottom: 1.8rem;
             color: #ffffff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
         }
 
-        /* 文章卡片样式 */
+        /* 文章卡片 - 高半透明，透出背景图片/流星/星星 */
         .post-card {
-            background-color: rgba(255, 255, 255, 0.88);
+            background-color: rgba(255, 255, 255, 0.6);
             padding: 1.8rem;
             margin-bottom: 1.8rem;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
             transition: transform 0.2s ease;
         }
         .post-card:hover {
@@ -191,25 +197,26 @@
             text-decoration: underline;
         }
         .post-date {
-            color: #636e72;
+            color: #44546a;
             font-size: 0.9rem;
             margin: 0.6rem 0 1rem;
         }
         .post-excerpt {
-            color: #48545a;
+            color: #2c3e50;
             font-size: 1rem;
         }
 
-        /* 页脚 */
+        /* 页脚 - 调低透明度 */
         footer {
-            background-color: rgba(116, 185, 255, 0.85);
+            background-color: rgba(116, 185, 255, 0.55);
             color: #fff;
             text-align: center;
             padding: 1.2rem;
             margin-top: 4rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
-        /* 手机端适配 */
+        /* 手机端适配：两栏变上下布局 */
         @media (max-width: 768px) {
             .wrap {
                 flex-direction: column;
@@ -221,7 +228,7 @@
     </style>
 </head>
 <body>
-    <!-- 静态繁星画布（纯代码星空） -->
+    <!-- 静态繁星画布（最底层） -->
     <canvas id="starCanvas"></canvas>
     <!-- 流星雨画布 -->
     <canvas id="meteorCanvas"></canvas>
@@ -289,7 +296,7 @@
         <p>© 2026 阿垚的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
     </footer>
 
-    <!-- JS 1：静态满天繁星（纯代码星空，无图片） -->
+    <!-- JS 1：静态满天繁星 -->
     <script>
         const starCanvas = document.getElementById('starCanvas');
         const starCtx = starCanvas.getContext('2d');
@@ -305,7 +312,6 @@
         resizeStar();
         window.addEventListener('resize', resizeStar);
 
-        // 生成静态星星
         class Star {
             constructor() {
                 this.x = Math.random() * starWidth;
@@ -322,7 +328,7 @@
         }
 
         function createStar() {
-            for (let i = 0; i < 220; i++) {
+            for (let i = 220; i > 0; i--) {
                 stars.push(new Star());
             }
         }
@@ -388,7 +394,7 @@
         }
 
         function init() {
-            for (let i = 0; i < 25; i++) {
+            for (let i = 25; i > 0; i--) {
                 meteors.push(new Meteor());
             }
         }
