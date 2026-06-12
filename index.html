@@ -3,89 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 网站标题（浏览器标签上显示的名字） -->
+    <!-- 网站标题 -->
     <title>阿垚的碎碎念</title>
     <style>
-        /* 全局基础样式，重置默认边距 */
+        /* 全局基础样式 + 爱心鼠标指针 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "微软雅黑", sans-serif;
+            /* 爱心鼠标 */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff6b81" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
         }
+
         body {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #e8f4fc;
+            color: #2d3436;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-        /* 导航栏样式 */
+
+        /* 流星雨背景画布 */
+        #meteorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 导航栏 */
         header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #74b9ff;
+            color: #ffffff;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 2px 8px rgba(116, 185, 255, 0.4);
         }
         .nav-container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .blog-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
+            letter-spacing: 2px;
         }
         .nav-links a {
-            color: white;
+            color: #ffffff;
             text-decoration: none;
             margin-left: 2rem;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
         }
         .nav-links a:hover {
-            color: #3498db;
+            color: #0984e3;
         }
-        /* 主内容区 */
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
+
+        /* 两栏布局外层容器 */
+        .wrap {
+            max-width: 1200px;
+            margin: 2.5rem auto;
             padding: 0 2rem;
+            display: flex;
+            gap: 2rem; /* 左右两栏间距 */
         }
-        /* 文章卡片样式 */
-        .post-card {
-            background-color: white;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+        /* 左侧：个人介绍侧边栏 */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0; /* 固定侧边栏宽度，不压缩 */
         }
-        .post-title {
-            color: #2c3e50;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+        .side-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(116, 185, 255, 0.25);
         }
-        .post-date {
-            color: #7f8c8d;
-            font-size: 0.9rem;
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #74b9ff;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2rem;
+        }
+        .side-name {
+            text-align: center;
+            font-size: 1.4rem;
+            color: #0984e3;
+            font-weight: bold;
             margin-bottom: 1rem;
         }
-        .post-excerpt {
-            color: #555;
-        }
-        /* 页脚样式 */
-        footer {
-            background-color: #2c3e50;
-            color: white;
+        .side-desc {
+            color: #48545a;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
             text-align: center;
-            padding: 1rem;
-            margin-top: 3rem;
+        }
+        .side-info {
+            margin-top: 1rem;
+            border-top: 1px solid #e0e9f0;
+            padding-top: 1rem;
+        }
+        .side-info p {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin: 0.5rem 0;
+        }
+
+        /* 右侧：文章列表区域 */
+        .main-content {
+            flex: 1; /* 右侧自适应宽度 */
+        }
+        .main-content > h2 {
+            margin-bottom: 1.8rem;
+            color: #0984e3;
+        }
+
+        /* 文章卡片样式 */
+        .post-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 1.8rem;
+            margin-bottom: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(116, 185, 255, 0.25);
+            transition: transform 0.2s ease;
+        }
+        .post-card:hover {
+            transform: translateY(-4px);
+        }
+        /* 文章标题链接样式 */
+        .post-title a {
+            color: #0984e3;
+            font-size: 1.35rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .post-title a:hover {
+            color: #74b9ff;
+            text-decoration: underline;
+        }
+        .post-date {
+            color: #636e72;
+            font-size: 0.9rem;
+            margin: 0.6rem 0 1rem;
+        }
+        .post-excerpt {
+            color: #48545a;
+            font-size: 1rem;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #74b9ff;
+            color: #fff;
+            text-align: center;
+            padding: 1.2rem;
+            margin-top: 4rem;
+        }
+
+        /* 适配手机：小屏幕自动变成上下布局 */
+        @media (max-width: 768px) {
+            .wrap {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- 流星雨背景画布 -->
+    <canvas id="meteorCanvas"></canvas>
+
+    <!-- 顶部导航栏 -->
     <header>
         <div class="nav-container">
-            <div class="blog-title">阿瑶的小博客</div>
+            <div class="blog-title">阿垚的碎碎念</div>
             <nav class="nav-links">
                 <a href="#">首页</a>
                 <a href="#">文章</a>
@@ -94,35 +198,132 @@
         </div>
     </header>
 
-    <!-- 主内容区：文章列表 -->
-    <main class="container">
-        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">📝 最新文章</h2>
+    <!-- 主体两栏布局：左侧个人介绍 + 右侧文章 -->
+    <div class="wrap">
+        <!-- 左侧：个人介绍侧边栏 -->
+        <aside class="sidebar">
+            <div class="side-card">
+                <!-- 头像占位（后续可替换图片） -->
+                <div class="avatar">垚</div>
+                <!-- 昵称 -->
+                <div class="side-name">阿垚</div>
+                <!-- 简短个人描述 -->
+                <div class="side-desc">
+                    热爱学习、记录日常<br>
+                    在这里分享笔记与生活
+                </div>
+                <!-- 详细个人信息 -->
+                <div class="side-info">
+                    <p>📚 主业：在校学生</p>
+                    <p>✨ 爱好：阅读、整理笔记</p>
+                    <p>💌 寄语：慢慢走，沿途有风景</p>
+                </div>
+            </div>
+        </aside>
 
-        <!-- 文章卡片1 -->
-        <article class="post-card">
-            <h3 class="post-title">第一次用GitHub Pages搭博客</h3>
-            <div class="post-date">发布于 2026-06-12</div>
-            <p class="post-excerpt">今天终于搞懂了GitHub Pages的用法，从零写了一个简单的博客页面，虽然很基础，但成就感满满！</p>
-        </article>
+        <!-- 右侧：文章列表区域 -->
+        <main class="main-content">
+            <h2>📝 我的文章笔记</h2>
 
-        <!-- 文章卡片2 -->
-        <article class="post-card">
-            <h3 class="post-title">分享一个VS Code新手小技巧</h3>
-            <div class="post-date">发布于 2026-06-11</div>
-            <p class="post-excerpt">原来用VS Code的「Live Server」插件可以边写代码边预览网页，再也不用提交到GitHub才看效果了，太方便了！</p>
-        </article>
+            <!-- 文章1：高数复习（点击跳转到 math.html） -->
+            <article class="post-card">
+                <h3 class="post-title">
+                    <a href="math.html">一、高数复习笔记</a>
+                </h3>
+                <div class="post-date">发布于 2026-06-12</div>
+                <p class="post-excerpt">整理高等数学核心知识点、公式与典型例题，用于日常复习备考，持续更新中。</p>
+            </article>
 
-        <!-- 文章卡片3 -->
-        <article class="post-card">
-            <h3 class="post-title">我的阅读清单：最近在读的书</h3>
-            <div class="post-date">发布于 2026-06-10</div>
-            <p class="post-excerpt">最近在看《深入理解计算机系统》，虽然有点难，但慢慢啃下来收获很大，之后会整理读书笔记分享在这里~</p>
-        </article>
-    </main>
+            <!-- 文章2：编程学习（点击跳转到 code.html） -->
+            <article class="post-card">
+                <h3 class="post-title">
+                    <a href="code.html">二、编程学习记录</a>
+                </h3>
+                <div class="post-date">发布于 2026-06-11</div>
+                <p class="post-excerpt">记录VS Code、HTML、GitHub Pages的学习过程，分享新手实用小技巧。</p>
+            </article>
+
+            <!-- 文章3：阅读书单（点击跳转到 read.html） -->
+            <article class="post-card">
+                <h3 class="post-title">
+                    <a href="read.html">三、读书笔记分享</a>
+                </h3>
+                <div class="post-date">发布于 2026-06-10</div>
+                <p class="post-excerpt">分享近期阅读的书籍、读后感与摘抄，一起在文字里成长。</p>
+            </article>
+        </main>
+    </div>
 
     <!-- 页脚 -->
     <footer>
-        <p>© 2026 阿瑶的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
+        <p>© 2026 阿垚的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
     </footer>
+
+    <!-- 动态流星雨 JS 特效 -->
+    <script>
+        const canvas = document.getElementById('meteorCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let meteors = [];
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Meteor {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height - height;
+                this.len = Math.random() * 80 + 20;
+                this.speed = Math.random() * 4 + 2;
+                this.angle = Math.PI / 4;
+                this.opacity = Math.random() * 0.8 + 0.2;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                const endX = this.x + this.len * Math.cos(this.angle);
+                const endY = this.y + this.len * Math.sin(this.angle);
+                ctx.lineTo(endX, endY);
+                const grad = ctx.createLinearGradient(this.x, this.y, endX, endY);
+                grad.addColorStop(0, `rgba(200, 220, 255, ${this.opacity})`);
+                grad.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            update() {
+                this.x += this.speed * Math.cos(this.angle);
+                this.y += this.speed * Math.sin(this.angle);
+                if (this.y > height || this.x > width) {
+                    this.reset();
+                }
+                this.draw();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 25; i++) {
+                meteors.push(new Meteor());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            meteors.forEach(meteor => meteor.update());
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
 </body>
 </html>
