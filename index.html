@@ -16,30 +16,68 @@
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff6b81" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
         }
 
+        /* 主体：纯代码星空底色（无任何图片链接） */
         body {
-            background-color: #e8f4fc;
+            /* 深蓝渐变星空底色，替代图片 */
+            background: linear-gradient(#0a1022, #142044, #0d1836);
+            background-attachment: fixed;
             color: #2d3436;
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* 流星雨背景画布 */
+        /* 图层1：静态繁星画布（最底层） */
+        #starCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -3;
+            pointer-events: none;
+        }
+
+        /* 图层2：流星雨画布 */
         #meteorCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1;
+            z-index: -2;
             pointer-events: none;
         }
 
+        /* ========== 鼠标跟随动态爱心 ========== */
+        .follow-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 180, 220, 0.9), 0 0 15px rgba(170, 210, 255, 0.7);
+            animation: floatHeart 1.2s ease-out forwards;
+        }
+        @keyframes floatHeart {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -180%) rotate(360deg) scale(0.4);
+            }
+        }
+        /* ====================================== */
+
         /* 导航栏 */
         header {
-            background-color: #74b9ff;
+            background-color: rgba(116, 185, 255, 0.85);
             color: #ffffff;
             padding: 1.2rem 2rem;
-            box-shadow: 0 2px 8px rgba(116, 185, 255, 0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
         .nav-container {
             max-width: 1200px;
@@ -70,19 +108,19 @@
             margin: 2.5rem auto;
             padding: 0 2rem;
             display: flex;
-            gap: 2rem; /* 左右两栏间距 */
+            gap: 2rem;
         }
 
         /* 左侧：个人介绍侧边栏 */
         .sidebar {
             width: 280px;
-            flex-shrink: 0; /* 固定侧边栏宽度，不压缩 */
+            flex-shrink: 0;
         }
         .side-card {
-            background-color: rgba(255, 255, 255, 0.85);
+            background-color: rgba(255, 255, 255, 0.88);
             padding: 1.8rem;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(116, 185, 255, 0.25);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         }
         .avatar {
             width: 100px;
@@ -122,26 +160,26 @@
 
         /* 右侧：文章列表区域 */
         .main-content {
-            flex: 1; /* 右侧自适应宽度 */
+            flex: 1;
         }
         .main-content > h2 {
             margin-bottom: 1.8rem;
-            color: #0984e3;
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
 
         /* 文章卡片样式 */
         .post-card {
-            background-color: rgba(255, 255, 255, 0.85);
+            background-color: rgba(255, 255, 255, 0.88);
             padding: 1.8rem;
             margin-bottom: 1.8rem;
             border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(116, 185, 255, 0.25);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             transition: transform 0.2s ease;
         }
         .post-card:hover {
             transform: translateY(-4px);
         }
-        /* 文章标题链接样式 */
         .post-title a {
             color: #0984e3;
             font-size: 1.35rem;
@@ -164,14 +202,14 @@
 
         /* 页脚 */
         footer {
-            background-color: #74b9ff;
+            background-color: rgba(116, 185, 255, 0.85);
             color: #fff;
             text-align: center;
             padding: 1.2rem;
             margin-top: 4rem;
         }
 
-        /* 适配手机：小屏幕自动变成上下布局 */
+        /* 手机端适配 */
         @media (max-width: 768px) {
             .wrap {
                 flex-direction: column;
@@ -183,7 +221,9 @@
     </style>
 </head>
 <body>
-    <!-- 流星雨背景画布 -->
+    <!-- 静态繁星画布（纯代码星空） -->
+    <canvas id="starCanvas"></canvas>
+    <!-- 流星雨画布 -->
     <canvas id="meteorCanvas"></canvas>
 
     <!-- 顶部导航栏 -->
@@ -198,21 +238,17 @@
         </div>
     </header>
 
-    <!-- 主体两栏布局：左侧个人介绍 + 右侧文章 -->
+    <!-- 主体两栏布局 -->
     <div class="wrap">
         <!-- 左侧：个人介绍侧边栏 -->
         <aside class="sidebar">
             <div class="side-card">
-                <!-- 头像占位（后续可替换图片） -->
                 <div class="avatar">垚</div>
-                <!-- 昵称 -->
                 <div class="side-name">阿垚</div>
-                <!-- 简短个人描述 -->
                 <div class="side-desc">
                     热爱学习、记录日常<br>
                     在这里分享笔记与生活
                 </div>
-                <!-- 详细个人信息 -->
                 <div class="side-info">
                     <p>📚 主业：在校学生</p>
                     <p>✨ 爱好：阅读、整理笔记</p>
@@ -224,8 +260,6 @@
         <!-- 右侧：文章列表区域 -->
         <main class="main-content">
             <h2>📝 我的文章笔记</h2>
-
-            <!-- 文章1：高数复习（点击跳转到 math.html） -->
             <article class="post-card">
                 <h3 class="post-title">
                     <a href="math.html">一、高数复习笔记</a>
@@ -233,8 +267,6 @@
                 <div class="post-date">发布于 2026-06-12</div>
                 <p class="post-excerpt">整理高等数学核心知识点、公式与典型例题，用于日常复习备考，持续更新中。</p>
             </article>
-
-            <!-- 文章2：编程学习（点击跳转到 code.html） -->
             <article class="post-card">
                 <h3 class="post-title">
                     <a href="code.html">二、编程学习记录</a>
@@ -242,8 +274,6 @@
                 <div class="post-date">发布于 2026-06-11</div>
                 <p class="post-excerpt">记录VS Code、HTML、GitHub Pages的学习过程，分享新手实用小技巧。</p>
             </article>
-
-            <!-- 文章3：阅读书单（点击跳转到 read.html） -->
             <article class="post-card">
                 <h3 class="post-title">
                     <a href="read.html">三、读书笔记分享</a>
@@ -259,7 +289,54 @@
         <p>© 2026 阿垚的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
     </footer>
 
-    <!-- 动态流星雨 JS 特效 -->
+    <!-- JS 1：静态满天繁星（纯代码星空，无图片） -->
+    <script>
+        const starCanvas = document.getElementById('starCanvas');
+        const starCtx = starCanvas.getContext('2d');
+        let starWidth, starHeight;
+        let stars = [];
+
+        function resizeStar() {
+            starWidth = window.innerWidth;
+            starHeight = window.innerHeight;
+            starCanvas.width = starWidth;
+            starCanvas.height = starHeight;
+        }
+        resizeStar();
+        window.addEventListener('resize', resizeStar);
+
+        // 生成静态星星
+        class Star {
+            constructor() {
+                this.x = Math.random() * starWidth;
+                this.y = Math.random() * starHeight;
+                this.r = Math.random() * 1.2 + 0.3;
+                this.alpha = Math.random() * 0.8 + 0.2;
+            }
+            draw() {
+                starCtx.beginPath();
+                starCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                starCtx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                starCtx.fill();
+            }
+        }
+
+        function createStar() {
+            for (let i = 0; i < 220; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function drawStarAll() {
+            starCtx.clearRect(0, 0, starWidth, starHeight);
+            stars.forEach(item => item.draw());
+            requestAnimationFrame(drawStarAll);
+        }
+        createStar();
+        drawStarAll();
+    </script>
+
+    <!-- JS 2：动态流星雨 -->
     <script>
         const canvas = document.getElementById('meteorCanvas');
         const ctx = canvas.getContext('2d');
@@ -294,8 +371,8 @@
                 const endY = this.y + this.len * Math.sin(this.angle);
                 ctx.lineTo(endX, endY);
                 const grad = ctx.createLinearGradient(this.x, this.y, endX, endY);
-                grad.addColorStop(0, `rgba(200, 220, 255, ${this.opacity})`);
-                grad.addColorStop(1, 'rgba(255,255,255,0)');
+                grad.addColorStop(0, `rgba(220, 235, 255, ${this.opacity})`);
+                grad.addColorStop(1, 'rgba(255,255,0)');
                 ctx.strokeStyle = grad;
                 ctx.lineWidth = 2;
                 ctx.stroke();
@@ -321,9 +398,49 @@
             meteors.forEach(meteor => meteor.update());
             requestAnimationFrame(animate);
         }
-
         init();
         animate();
+    </script>
+
+    <!-- JS 3：鼠标跟随布灵布灵爱心 -->
+    <script>
+        let lastTime = 0;
+        const heartColors = ['#ff8fb9', '#a0c8ff', '#ffffff'];
+
+        document.addEventListener('mousemove', function(e) {
+            const now = Date.now();
+            if (now - lastTime < 120) return;
+            lastTime = now;
+
+            const heart = document.createElement('div');
+            heart.className = 'follow-heart';
+            heart.style.backgroundColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 1200);
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            const now = Date.now();
+            if (now - lastTime < 120) return;
+            lastTime = now;
+
+            const touch = e.touches[0];
+            const heart = document.createElement('div');
+            heart.className = 'follow-heart';
+            heart.style.backgroundColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.left = touch.pageX + 'px';
+            heart.style.top = touch.pageY + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 1200);
+        });
     </script>
 </body>
 </html>
