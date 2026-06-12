@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 网站标题（浏览器标签上显示的名字） -->
+    <title>阿垚的碎碎念</title>
+    <style>
+        /* 全局基础样式，重置默认边距 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* 导航栏样式 */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .blog-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+        }
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        /* 主内容区 */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        /* 文章卡片样式 */
+        .post-card {
+            background-color: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .post-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .post-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .post-excerpt {
+            color: #555;
+        }
+        /* 页脚样式 */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="nav-container">
+            <div class="blog-title">阿瑶的小博客</div>
+            <nav class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">文章</a>
+                <a href="#">关于我</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主内容区：文章列表 -->
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">📝 最新文章</h2>
+
+        <!-- 文章卡片1 -->
+        <article class="post-card">
+            <h3 class="post-title">第一次用GitHub Pages搭博客</h3>
+            <div class="post-date">发布于 2026-06-12</div>
+            <p class="post-excerpt">今天终于搞懂了GitHub Pages的用法，从零写了一个简单的博客页面，虽然很基础，但成就感满满！</p>
+        </article>
+
+        <!-- 文章卡片2 -->
+        <article class="post-card">
+            <h3 class="post-title">分享一个VS Code新手小技巧</h3>
+            <div class="post-date">发布于 2026-06-11</div>
+            <p class="post-excerpt">原来用VS Code的「Live Server」插件可以边写代码边预览网页，再也不用提交到GitHub才看效果了，太方便了！</p>
+        </article>
+
+        <!-- 文章卡片3 -->
+        <article class="post-card">
+            <h3 class="post-title">我的阅读清单：最近在读的书</h3>
+            <div class="post-date">发布于 2026-06-10</div>
+            <p class="post-excerpt">最近在看《深入理解计算机系统》，虽然有点难，但慢慢啃下来收获很大，之后会整理读书笔记分享在这里~</p>
+        </article>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 阿瑶的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
+    </footer>
+</body>
+</html>
