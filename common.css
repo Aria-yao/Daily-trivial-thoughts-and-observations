@@ -10,7 +10,7 @@
 
 /* 全站统一背景：star.jpg 自适应、固定 */
 body {
-    background-image: url("star.jpg");
+    background-image: url("images/star.jpg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
