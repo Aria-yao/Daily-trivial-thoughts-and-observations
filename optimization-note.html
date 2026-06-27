@@ -46,7 +46,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // 自动加载同目录下的 optimization-note.md 并渲染
-        fetch('optimization-note.md')
+        fetch('notes/optimization-note.md')
             .then(response => {
                 if (!response.ok) throw new Error('笔记文件加载失败，请检查文件名是否匹配');
                 return response.text();

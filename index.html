@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿垚的碎碎念</title>
-    <!-- 【关键】引入全局样式文件（全站共用背景、色调、布局） -->
+    <!-- 引入全局样式文件 -->
     <link rel="stylesheet" href="common.css">
 </head>
 <body>
-    <!-- 特效画布（必须保留，配合common.js运行） -->
+    <!-- 特效画布 -->
     <canvas id="starCanvas"></canvas>
     <canvas id="meteorCanvas"></canvas>
 
@@ -18,7 +18,7 @@
             <div class="blog-title">阿垚的碎碎念</div>
             <nav class="nav-links">
                 <a href="index.html">首页</a>
-                <a href="math.html">文章</a>
+                <a href="optimization-note.html">文章</a>
                 <a href="#">关于我</a>
             </nav>
         </div>
@@ -29,7 +29,8 @@
         <!-- 左侧个人侧边栏 -->
         <aside class="sidebar">
             <div class="side-card">
-                <img src="头像.jpg" alt="阿垚头像" class="avatar" />
+                <!-- 路径修正：头像指向 images 文件夹 -->
+                <img src="images/头像.jpg" alt="阿垚头像" class="avatar" />
                 <div class="side-name">阿垚</div>
                 <div class="side-desc">
                     热爱学习、记录日常<br>
@@ -47,7 +48,7 @@
         <main class="main-content">
             <h2>📝 我的文章笔记</h2>
             <article class="post-card">
-                <h3 class="post-title"><a href="math.html">一、最优化算法论文笔记</a></h3>
+                <h3 class="post-title"><a href="optimization-note.html">一、最优化算法论文笔记</a></h3>
                 <div class="post-date">发布于 2026-06-12</div>
                 <p class="post-excerpt">基于最优化算法的研究路线的短暂三天研究的思考。</p>
             </article>
@@ -69,7 +70,7 @@
         <p>© 2026 阿垚的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
     </footer>
 
-    <!-- 【关键】引入全局动态脚本（繁星、流星、爱心） -->
+    <!-- 引入全局动态脚本 -->
     <script src="common.js"></script>
 </body>
 </html>
