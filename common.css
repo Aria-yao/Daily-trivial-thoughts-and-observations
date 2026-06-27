@@ -8,16 +8,17 @@
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff6b81" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
 }
 
-/* 全站统一背景：star.jpg 自适应、固定 */
+/* 全站统一背景：移到html上，确保在最底层 */
+html {
+    height: 100%;
+    background: #0a1628 url("images/star.jpg") center / cover no-repeat fixed;
+}
+
 body {
-    background-image: url("images/star.jpg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
     color: #2d3436;
     line-height: 1.6;
     overflow-x: hidden;
+    min-height: 100%;
 }
 
 /* 星空、流星画布（全站特效底层） */
@@ -27,7 +28,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -3;
+    z-index: -2;
     pointer-events: none;
 }
 #meteorCanvas {
@@ -36,7 +37,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -2;
+    z-index: -1;
     pointer-events: none;
 }
 
@@ -44,7 +45,7 @@ body {
 .follow-heart {
     position: fixed;
     pointer-events: none;
-    z-index: -1;
+    z-index: 9999;
     transform: translate(-50%, -50%);
     width: 18px;
     height: 18px;
