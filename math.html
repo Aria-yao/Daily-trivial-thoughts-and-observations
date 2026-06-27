@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高数复习笔记 - 阿垚的碎碎念</title>
-    <!-- 1. 引入全局样式（继承所有背景、色调、样式） -->
+    <title>最优化算法笔记 - 阿垚的碎碎念</title>
+    <!-- 引入全局样式 -->
     <link rel="stylesheet" href="common.css">
 </head>
 <body>
-    <!-- 特效画布（必须保留） -->
+    <!-- 特效画布 保留不动 -->
     <canvas id="starCanvas"></canvas>
     <canvas id="meteorCanvas"></canvas>
 
-    <!-- 顶部导航栏（和首页统一） -->
+    <!-- 顶部导航栏 和首页完全一致 -->
     <header>
         <div class="nav-container">
             <div class="blog-title">阿垚的碎碎念</div>
@@ -24,12 +24,11 @@
         </div>
     </header>
 
-    <!-- 笔记正文区域（自动套用半透明样式） -->
+    <!-- 笔记正文区域 -->
     <div class="article-box">
-        <h1>高数复习笔记</h1>
-        <!-- 在这里写你的笔记内容，纯文字即可 -->
-        <p>这里记录高等数学知识点、公式、例题……</p>
-        <p>可以分段、换行，正常编辑内容即可。</p>
+        <h1>最优化算法笔记</h1>
+        <!-- 笔记内容自动加载到这里，你无需修改此文件 -->
+        <div id="note-content"></div>
 
         <!-- 返回首页按钮 -->
         <a href="index.html" class="back-btn">← 返回首页</a>
@@ -40,7 +39,27 @@
         <p>© 2026 阿垚的小博客 | 用 ❤️ 和 GitHub Pages 搭建</p>
     </footer>
 
-    <!-- 2. 引入全局动态特效 -->
+    <!-- 引入全局动态特效 -->
     <script src="common.js"></script>
+
+    <!-- Markdown 渲染 + 笔记文件自动加载 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // 自动加载同目录下的 optimization-note.md 并渲染
+        fetch('optimization-note.md')
+            .then(response => {
+                if (!response.ok) throw new Error('笔记文件加载失败，请检查文件名是否匹配');
+                return response.text();
+            })
+            .then(markdownText => {
+                // 将 Markdown 转为 HTML 并插入页面
+                document.getElementById('note-content').innerHTML = marked.parse(markdownText);
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById('note-content').innerHTML = 
+                    '<p style="color:#ff6b6b">笔记加载失败，请检查：<br>1. 同目录下是否存在 optimization-note.md 文件<br>2. 请使用 Live Server 打开页面，不要直接双击HTML文件</p>';
+            });
+    </script>
 </body>
 </html>
