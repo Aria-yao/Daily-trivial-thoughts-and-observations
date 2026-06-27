@@ -1,4 +1,4 @@
-// 1. 静态繁星
+// 1. 静态繁星（增加闪烁效果）
 const starCanvas = document.getElementById('starCanvas');
 const starCtx = starCanvas.getContext('2d');
 let starWidth, starHeight;
@@ -11,19 +11,23 @@ function resizeStar() {
     starCanvas.height = starHeight;
 }
 resizeStar();
-window.addEventListener('resize', function(){
-    resizeStar();
-    resizeCanvas();
-});
 
 class Star {
     constructor() {
         this.x = Math.random() * starWidth;
         this.y = Math.random() * starHeight;
-        this.r = Math.random() * 1.2 + 0.3;
-        this.alpha = Math.random() * 0.8 + 0.2;
+        this.r = Math.random() * 1.5 + 0.5;
+        this.baseAlpha = Math.random() * 0.6 + 0.3;
+        this.alpha = this.baseAlpha;
+        this.speed = Math.random() * 0.02 + 0.005;
+        this.direction = 1;
     }
     draw() {
+        // 闪烁逻辑：透明度周期变化
+        this.alpha += this.speed * this.direction;
+        if (this.alpha >= 1 || this.alpha <= this.baseAlpha * 0.3) {
+            this.direction *= -1;
+        }
         starCtx.beginPath();
         starCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
         starCtx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
@@ -32,6 +36,7 @@ class Star {
 }
 
 function createStar() {
+    stars = [];
     for (let i = 220; i > 0; i--) {
         stars.push(new Star());
     }
@@ -45,7 +50,7 @@ function drawStarAll() {
 createStar();
 drawStarAll();
 
-// 2. 动态流星雨
+// 2. 动态流星雨（修复初始尺寸未初始化的bug）
 const canvas = document.getElementById('meteorCanvas');
 const ctx = canvas.getContext('2d');
 let width, height;
@@ -57,6 +62,7 @@ function resizeCanvas() {
     canvas.width = width;
     canvas.height = height;
 }
+resizeCanvas(); // 修复：初始加载就执行一次尺寸初始化
 
 class Meteor {
     constructor() {
@@ -94,6 +100,7 @@ class Meteor {
 }
 
 function init() {
+    meteors = [];
     for (let i = 25; i > 0; i--) {
         meteors.push(new Meteor());
     }
@@ -106,6 +113,14 @@ function animate() {
 }
 init();
 animate();
+
+// 窗口缩放统一处理
+window.addEventListener('resize', function(){
+    resizeStar();
+    resizeCanvas();
+    createStar(); // 窗口变化后重新生成星星，避免空白
+    init();
+});
 
 // 3. 鼠标跟随爱心
 let lastTime = 0;
